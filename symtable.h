@@ -6,6 +6,11 @@
 #ifndef SYMTABLE_INCLUDED
 #define SYMTABLE_INCLUDED
 
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
+#include "symtable.h"
+
 typedef struct SymTable *SymTable_T;
 
 SymTable_T SymTable_new(void);
