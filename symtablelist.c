@@ -1,7 +1,4 @@
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
-#include "symtable.h"
+
 
 struct SymTableBinding
 {
@@ -182,6 +179,8 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     return NULL;
 }
 
-/* void SymTable_map(SymTable_T oSymTable,
+void SymTable_map(SymTable_T oSymTable,
 void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
-const void *pvExtra) */
+const void *pvExtra) {
+    return;
+}

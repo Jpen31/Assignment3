@@ -385,7 +385,6 @@ static void testRemove(void)
 
 /* Test the SymTable_map() function. */
 
-/*
 static void testMap(void)
 {
    SymTable_T oSymTable;
@@ -429,7 +428,7 @@ static void testMap(void)
 
    SymTable_free(oSymTable);
 }
- */
+
 /*--------------------------------------------------------------------*/
 
 /* Test a SymTable object that contains no bindings. */
@@ -461,7 +460,7 @@ static void testEmptyTable(void)
    pcValue = (char*)SymTable_remove(oSymTable, "Jeter");
    ASSURE(pcValue == NULL);
 
-   /* SymTable_map(oSymTable, printBinding, "%s\t%s\n"); */
+   SymTable_map(oSymTable, printBinding, "%s\t%s\n");
 
    SymTable_free(oSymTable);
 }
@@ -500,7 +499,7 @@ static void testEmptyKey(void)
 
    printf("An empty name and a position should appear here:\n");
    fflush(stdout);
-   /* SymTable_map(oSymTable, printBinding, "%s\t%s\n"); */
+   SymTable_map(oSymTable, printBinding, "%s\t%s\n");
 
    pcValue = (char*)SymTable_remove(oSymTable, "");
    ASSURE(pcValue == acShortstop);
@@ -954,7 +953,7 @@ int main(int argc, char *argv[])
    testKeyComparison();
    testKeyOwnership();
    testRemove();
-   /* testMap(); */
+   testMap();
    testEmptyTable();
    testEmptyKey();
    testNullValue();
