@@ -82,7 +82,7 @@ const void *pvValue) {
         return 0;
     }
 
-    *(psNewNode->pcKey) = strcpy((char *) pcKey);
+    strcpy(psNewNode->pcKey, (char *) pcKey);
     psNewNode->pvValue = pvValue;
     psNewNode->psNextBinding = oSymTable->psFirstBinding;
     oSymTable->bindings += 1;
