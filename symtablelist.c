@@ -84,6 +84,7 @@ const void *pvValue) {
     *(psNewNode->pcKey) = strcpy(pcKey);
     psNewNode->pvValue = pvValue;
     psNewNode->psNextBinding = oSymTable->psFirstBinding;
+    oSymTable->bindings += 1;
 
     return 1;
 }
@@ -159,6 +160,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
         free(psCurrent->pcKey);
         pvTempValue = psCurrent->pvValue;
         free(psCurrent);
+        oSymTable->bindings -= 1;
         return pvTempValue;
     }
 
