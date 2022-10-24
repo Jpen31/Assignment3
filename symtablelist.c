@@ -62,7 +62,7 @@ const void *pvValue) {
     assert(pvValue != NULL);
 
     psChecker = oSymTable->psFirstBinding;
-    for(psChecker != NULL) {
+    while(psChecker != NULL) {
         if(SymTable_contains(oSymTable, pcKey)) {
             return 0;
         }
@@ -99,7 +99,7 @@ const void *pvValue) {
     assert(pvValue != NULL);
 
     psChecker = oSymTable->psFirstBinding;
-    for(psChecker != NULL) {
+    while(psChecker != NULL) {
         if(SymTable_contains(oSymTable, pcKey)) {
             pvTempValue = psChecker->pvValue;
             psChecker->pvValue = pvValue;
@@ -118,7 +118,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     assert(pcKey != NULL);
 
     psChecker = oSymTable->psFirstBinding;
-    for(psChecker != NULL) {
+    while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
             return 1;
         }
@@ -135,7 +135,7 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     assert(pcKey != NULL);
 
     psChecker = oSymTable->psFirstBinding;
-    for(psChecker != NULL) {
+    while(psChecker != NULL) {
         if(SymTable_contains(oSymTable, pcKey)) {
             return psChecker->pvValue;
         }
@@ -166,7 +166,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
 
     psPrevious = psCurrent;
     psCurrent = psCurrent->psNextBinding;
-    for(psChecker != NULL) {
+    while(psChecker != NULL) {
         if(SymTable_contains(oSymTable, pcKey)) {
             psPrevious->psNextBinding = psCurrent->psNextBinding;
             free(psCurrent->pcKey);
