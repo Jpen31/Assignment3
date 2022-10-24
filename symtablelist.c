@@ -1,4 +1,4 @@
-
+#include "symtable.h"
 
 struct SymTableBinding
 {
