@@ -103,7 +103,7 @@ const void *pvValue) {
     while(psChecker != NULL) {
         if(SymTable_contains(oSymTable, pcKey)) {
             pvTempValue = psChecker->pvValue;
-            psChecker->pvValue = pvValue;
+            psChecker->pvValue = (char *) pvValue;
             return pvTempValue;
         }
         psChecker = psChecker->psNextBinding;
@@ -167,7 +167,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
 
     psPrevious = psCurrent;
     psCurrent = psCurrent->psNextBinding;
-    while(psChecker != NULL) {
+    while(psCurrent != NULL) {
         if(SymTable_contains(oSymTable, pcKey)) {
             psPrevious->psNextBinding = psCurrent->psNextBinding;
             free(psCurrent->pcKey);
