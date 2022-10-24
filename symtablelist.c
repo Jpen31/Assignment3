@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "symtable.h"
 
+typedef struct SymTable *SymTable_T;
+
 struct SymTableBinding
 {
     char *pcKey;
