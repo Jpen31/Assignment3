@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include "symtable.h"
 
-typedef struct SymTable *SymTable_T;
-
 struct SymTableBinding
 {
     char *pcKey;
@@ -27,7 +25,7 @@ SymTable_T SymTable_new(void) {
     }
 
     oSymTable->psFirstBinding = NULL;
-    SymTable->bindings = 0;
+    oSymTable->bindings = 0;
     return oSymTable;
 }
 
@@ -51,7 +49,7 @@ void SymTable_free(SymTable_T oSymTable) {
 
 size_t SymTable_getLength(SymTable_T oSymTable) {
     assert(oSymTable != NULL);
-    return oSymTable->binding;
+    return oSymTable->bindings;
 }
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
