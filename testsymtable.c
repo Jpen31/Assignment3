@@ -461,7 +461,7 @@ static void testEmptyTable(void)
    pcValue = (char*)SymTable_remove(oSymTable, "Jeter");
    ASSURE(pcValue == NULL);
 
-   SymTable_map(oSymTable, printBinding, "%s\t%s\n");
+   /* SymTable_map(oSymTable, printBinding, "%s\t%s\n"); */
 
    SymTable_free(oSymTable);
 }
@@ -500,7 +500,7 @@ static void testEmptyKey(void)
 
    printf("An empty name and a position should appear here:\n");
    fflush(stdout);
-   SymTable_map(oSymTable, printBinding, "%s\t%s\n");
+   /* SymTable_map(oSymTable, printBinding, "%s\t%s\n"); */
 
    pcValue = (char*)SymTable_remove(oSymTable, "");
    ASSURE(pcValue == acShortstop);
