@@ -2,8 +2,8 @@
 
 struct SymTableBinding
 {
-    char *pcKey;
-    void *pvValue;
+    const char *pcKey;
+    const void *pvValue;
 
     struct SymTableBinding *psNextBinding;
 };
@@ -59,30 +59,27 @@ const void *pvValue) {
     assert(pcKey != NULL);
     assert(pvValue != NULL);
 
-    psChecker = oSymTable->psFirstBinding;
-    while(psChecker != NULL) {
-        if(SymTable_contains(oSymTable, pcKey)) {
-            return 0;
-        }
-        psChecker = psChecker->psNextBinding;
+    if(SymTable_contains(oSymTable, pcKey)) {
+        return 0;
     }
-
+        
     psNewNode = (struct SymTableBinding*)
         malloc(sizeof(struct SymTableBinding));
     if (psNewNode == NULL) {
         return 0;
     }
 
-    psNewNode->pcKey = (char*)malloc(strlen(pcKey));
-    
+    psNewNode->pcKey = (char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
     if(psNewNode->pcKey == NULL || psNewNode->pvValue == NULL) {
+        free(psNewNode);  
         return 0;
     }
 
-    strcpy(psNewNode->pcKey, (char *) pcKey);
-    psNewNode->pvValue = (char *) pvValue;
+    strcpy(psNewNode->pcKey, pcKey);
+    psNewNode->pvValue = pvValue;
     psNewNode->psNextBinding = oSymTable->psFirstBinding;
-    oSymTable->bindings += 1;
+    oSymTable->psFirstBinding = psNewNode;
+    (oSymTable->bindings)++;
 
     return 1;
 }
@@ -100,7 +97,7 @@ const void *pvValue) {
     while(psChecker != NULL) {
         if(SymTable_contains(oSymTable, pcKey)) {
             pvTempValue = psChecker->pvValue;
-            psChecker->pvValue = (char *) pvValue;
+            psChecker->pvValue = pvValue;
             return pvTempValue;
         }
         psChecker = psChecker->psNextBinding;
