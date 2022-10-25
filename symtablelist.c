@@ -92,9 +92,11 @@ const void *pvValue) {
     assert(pcKey != NULL);
     assert(pvValue != NULL);
 
+    
+    
     psChecker = oSymTable->psFirstBinding;
     while(psChecker != NULL) {
-        if(SymTable_contains(oSymTable, pcKey)) {
+        if(!strcmp(psChecker->pcKey, pcKey)) {
             pvTempValue = psChecker->pvValue;
             psChecker->pvValue = (char *) pvValue;
             return pvTempValue;
