@@ -90,7 +90,7 @@ const void *pvValue) {
     
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
-    assert(pvValue != NULL);
+    /* assert(pvValue != NULL); */
 
     psChecker = oSymTable->psFirstBinding;
     while(psChecker != NULL) {
