@@ -106,7 +106,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
-    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymtable->buckets]);
+    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
 
     if(oSymTable->psHashTable == NULL) {
         return 0;
