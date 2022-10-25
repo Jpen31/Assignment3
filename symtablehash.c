@@ -17,7 +17,7 @@ struct SymTable
 {
    struct Binding **psHashTable;
    size_t bindings;
-   size_t BucketCount;
+   size_t buckets;
 };
 
 SymTable_T SymTable_new(void) {
@@ -36,7 +36,7 @@ SymTable_T SymTable_new(void) {
     }
 
     oSymTable->bindings = 0;
-    oSymTable->BucketCount = 0;
+    oSymTable->buckets = 0;
     return oSymTable;
 }
 
@@ -64,12 +64,64 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 }
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
-const void *pvValue) {}
+const void *pvValue) {
+    struct Binding *psNewNode;
+    size_t KeyHash;
+    
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+
+    if(SymTable_contains(oSymTable, pcKey)) {
+        return 0;
+    }
+        
+    psNewNode = (struct Binding*)malloc(sizeof(struct Binding));
+    if (psNewNode == NULL) {
+        return 0;
+    }
+
+    psNewNode->pcKey = (char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
+    if(psNewNode->pcKey == NULL) {
+        free(psNewNode);  
+        return 0;
+    }
+
+    KeyHash = SymTable_hash(pcKey, auBucketCount[buckets]);
+    strcpy(psNewNode->pcKey, pcKey);
+    psNewNode->pvValue = (char *) pvValue;
+    psNewNode->psNextBinding = (oSymTable->psHashTable)[oSymTable->buckets];
+    (oSymTable->psHashTable)[oSymTable->buckets] = psNewNode;
+    (oSymTable->bindings)++;
+
+    return 1;
+}
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
 const void *pvValue) {}
 
-int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {}
+int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
+    struct Binding *psChecker;
+    size_t KeyHash;
+
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+
+    KeyHash = SymTable_hash(pcKey, auBucketCount[oSymtable->buckets]);
+
+    if(oSymTable->psHashTable == NULL) {
+        return 0;
+    }
+
+    psChecker = (oSymTable->psHashTable)[KeyHash];
+    while(psChecker != NULL) {
+        if(!strcmp(psChecker->pcKey, pcKey)) {
+            return 1;
+        }
+        psChecker = psChecker->psNextBinding;
+    }
+
+    return 0;
+}
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {}
 
