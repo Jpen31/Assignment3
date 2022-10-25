@@ -3,7 +3,7 @@
 struct SymTableBinding
 {
     char *pcKey;
-    const void *pvValue;
+    void *pvValue;
 
     struct SymTableBinding *psNextBinding;
 };
@@ -69,13 +69,13 @@ const void *pvValue) {
     }
 
     psNewNode->pcKey = (char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
-    if(psNewNode->pcKey == NULL || psNewNode->pvValue == NULL) {
+    if(psNewNode->pcKey == NULL) {
         free(psNewNode);  
         return 0;
     }
 
     strcpy(psNewNode->pcKey, pcKey);
-    psNewNode->pvValue = pvValue;
+    psNewNode->pvValue = (char *) pvValue;
     psNewNode->psNextBinding = oSymTable->psFirstBinding;
     oSymTable->psFirstBinding = psNewNode;
     (oSymTable->bindings)++;
