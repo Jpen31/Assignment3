@@ -130,7 +130,7 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
 
     psChecker = oSymTable->psFirstBinding;
     while(psChecker != NULL) {
-        if(SymTable_contains(oSymTable, pcKey)) {
+        if(!strcmp(psChecker->pcKey, pcKey)) {
             return psChecker->pvValue;
         }
         psChecker = psChecker->psNextBinding;
