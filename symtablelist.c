@@ -53,7 +53,7 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
 const void *pvValue) {
     struct SymTableBinding *psNewNode;
-    struct SymTableBinding *psChecker;
+    /* struct SymTableBinding *psChecker; */
     
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
@@ -69,14 +69,14 @@ const void *pvValue) {
         return 0;
     }
 
-    psNewNode->pcKey = (const char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
+    psNewNode->pcKey = (char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
     if(psNewNode->pcKey == NULL || psNewNode->pvValue == NULL) {
         free(psNewNode);  
         return 0;
     }
 
     strcpy(psNewNode->pcKey, pcKey);
-    psNewNode->pvValue = pvValue;
+    psNewNode->pvValue = (char *) pvValue;
     psNewNode->psNextBinding = oSymTable->psFirstBinding;
     oSymTable->psFirstBinding = psNewNode;
     (oSymTable->bindings)++;
@@ -97,7 +97,7 @@ const void *pvValue) {
     while(psChecker != NULL) {
         if(SymTable_contains(oSymTable, pcKey)) {
             pvTempValue = psChecker->pvValue;
-            psChecker->pvValue = pvValue;
+            psChecker->pvValue = (char *) pvValue;
             return pvTempValue;
         }
         psChecker = psChecker->psNextBinding;
