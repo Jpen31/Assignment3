@@ -3,7 +3,7 @@
 struct SymTableBinding
 {
     char *pcKey;
-    void *pvValue;
+    const void *pvValue;
 
     struct SymTableBinding *psNextBinding;
 };
@@ -53,15 +53,14 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
 const void *pvValue) {
     struct SymTableBinding *psNewNode;
-    /* struct SymTableBinding *psChecker; */
     
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
     assert(pvValue != NULL);
 
-    /* if(SymTable_contains(oSymTable, pcKey)) {
+    if(SymTable_contains(oSymTable, pcKey)) {
         return 0;
-    } */
+    }
         
     psNewNode = (struct SymTableBinding*)
         malloc(sizeof(struct SymTableBinding));
@@ -76,7 +75,7 @@ const void *pvValue) {
     }
 
     strcpy(psNewNode->pcKey, pcKey);
-    psNewNode->pvValue = (char *) pvValue;
+    psNewNode->pvValue = pvValue;
     psNewNode->psNextBinding = oSymTable->psFirstBinding;
     oSymTable->psFirstBinding = psNewNode;
     (oSymTable->bindings)++;
