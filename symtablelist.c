@@ -1,16 +1,16 @@
 #include "symtable.h"
 
-struct SymTableBinding
+struct Binding
 {
     char *pcKey;
     void *pvValue;
 
-    struct SymTableBinding *psNextBinding;
+    struct Binding *psNextBinding;
 };
 
 struct SymTable
 {
-   struct SymTableBinding *psFirstBinding;
+   struct Binding *psFirstBinding;
    size_t bindings;
 };
 
@@ -28,8 +28,8 @@ SymTable_T SymTable_new(void) {
 }
 
 void SymTable_free(SymTable_T oSymTable) {
-    struct SymTableBinding *psCurrentBinding;
-    struct SymTableBinding *psNextBinding;
+    struct Binding *psCurrentBinding;
+    struct Binding *psNextBinding;
 
     assert(oSymTable != NULL);
 
@@ -52,7 +52,7 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
 const void *pvValue) {
-    struct SymTableBinding *psNewNode;
+    struct Binding *psNewNode;
     
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
@@ -62,8 +62,7 @@ const void *pvValue) {
         return 0;
     }
         
-    psNewNode = (struct SymTableBinding*)
-        malloc(sizeof(struct SymTableBinding));
+    psNewNode = (struct Binding*)malloc(sizeof(struct Binding));
     if (psNewNode == NULL) {
         return 0;
     }
@@ -85,7 +84,7 @@ const void *pvValue) {
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
 const void *pvValue) {
-    struct SymTableBinding *psChecker;
+    struct Binding *psChecker;
     void *pvTempValue;
     
     assert(oSymTable != NULL);
@@ -106,7 +105,7 @@ const void *pvValue) {
 }
 
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
-    struct SymTableBinding *psChecker;
+    struct Binding *psChecker;
 
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
@@ -127,7 +126,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
 }
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
-    struct SymTableBinding *psChecker;
+    struct Binding *psChecker;
 
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
@@ -148,8 +147,8 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
 }
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
-    struct SymTableBinding *psCurrent;
-    struct SymTableBinding *psPrevious;
+    struct Binding *psCurrent;
+    struct Binding *psPrevious;
     void *pvTempValue;
     
     assert(oSymTable != NULL);
@@ -191,5 +190,5 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
 void SymTable_map(SymTable_T oSymTable,
 void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
 const void *pvExtra) {
-    return;
+    
 }
