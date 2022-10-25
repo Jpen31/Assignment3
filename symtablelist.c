@@ -154,7 +154,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
         free(psCurrent->pcKey);
         pvTempValue = psCurrent->pvValue;
         free(psCurrent);
-        oSymTable->bindings -= 1;
+        (oSymTable->bindings)--;
         return pvTempValue;
     }
 
@@ -166,6 +166,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
             free(psCurrent->pcKey);
             pvTempValue = psCurrent->pvValue;
             free(psCurrent);
+            (oSymTable->bindings)--;
             return pvTempValue;
         }
         psPrevious = psCurrent;
