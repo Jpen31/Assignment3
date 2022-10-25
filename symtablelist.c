@@ -92,8 +92,6 @@ const void *pvValue) {
     assert(pcKey != NULL);
     assert(pvValue != NULL);
 
-    
-    
     psChecker = oSymTable->psFirstBinding;
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
@@ -151,7 +149,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
 
     psCurrent = oSymTable->psFirstBinding;
     
-    if(SymTable_contains(oSymTable, pcKey)) {
+    if(!strcmp(psCurrent->pcKey, pcKey)) {
         oSymTable->psFirstBinding = psCurrent->psNextBinding;
         free(psCurrent->pcKey);
         pvTempValue = psCurrent->pvValue;
