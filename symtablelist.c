@@ -59,9 +59,9 @@ const void *pvValue) {
     assert(pcKey != NULL);
     assert(pvValue != NULL);
 
-    if(SymTable_contains(oSymTable, pcKey)) {
+    /* if(SymTable_contains(oSymTable, pcKey)) {
         return 0;
-    }
+    } */
         
     psNewNode = (struct SymTableBinding*)
         malloc(sizeof(struct SymTableBinding));
