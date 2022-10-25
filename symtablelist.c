@@ -2,8 +2,8 @@
 
 struct SymTableBinding
 {
-    const char *pcKey;
-    const void *pvValue;
+    char *pcKey;
+    void *pvValue;
 
     struct SymTableBinding *psNextBinding;
 };
@@ -69,7 +69,7 @@ const void *pvValue) {
         return 0;
     }
 
-    psNewNode->pcKey = (char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
+    psNewNode->pcKey = (const char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
     if(psNewNode->pcKey == NULL || psNewNode->pvValue == NULL) {
         free(psNewNode);  
         return 0;
