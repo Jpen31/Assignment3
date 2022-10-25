@@ -111,6 +111,10 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
+    if(oSymTable->psFirstBinding == NULL) {
+        return 0;
+    }
+
     psChecker = oSymTable->psFirstBinding;
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
@@ -127,6 +131,10 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
 
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
+
+    if(oSymTable->psFirstBinding == NULL) {
+        return NULL;
+    }
 
     psChecker = oSymTable->psFirstBinding;
     while(psChecker != NULL) {
@@ -147,6 +155,10 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
+    if(oSymTable->psFirstBinding == NULL) {
+        return NULL;
+    }
+    
     psCurrent = oSymTable->psFirstBinding;
     
     if(!strcmp(psCurrent->pcKey, pcKey)) {
