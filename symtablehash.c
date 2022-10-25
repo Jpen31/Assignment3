@@ -86,7 +86,7 @@ const void *pvValue) {
         return 0;
     }
 
-    KeyHash = SymTable_hash(pcKey, auBucketCount[buckets]);
+    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
     strcpy(psNewNode->pcKey, pcKey);
     psNewNode->pvValue = (char *) pvValue;
     psNewNode->psNextBinding = (oSymTable->psHashTable)[oSymTable->buckets];
@@ -106,7 +106,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
-    KeyHash = SymTable_hash(pcKey, auBucketCount[oSymtable->buckets]);
+    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymtable->buckets]);
 
     if(oSymTable->psHashTable == NULL) {
         return 0;
