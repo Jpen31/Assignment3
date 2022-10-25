@@ -123,7 +123,28 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     return 0;
 }
 
-void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {}
+void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
+    struct Binding *psChecker;
+    size_t KeyHash;
+
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+
+    if(oSymTable->psHashTable == NULL) {
+        return NULL;
+    }
+
+    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
+    psChecker = (oSymTable->psHashTable)[KeyHash];
+    while(psChecker != NULL) {
+        if(!strcmp(psChecker->pcKey, pcKey)) {
+            return psChecker->pvValue;
+        }
+        psChecker = psChecker->psNextBinding;
+    }
+
+    return NULL;
+}
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {}
 
