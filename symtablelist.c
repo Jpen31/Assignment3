@@ -163,7 +163,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     psPrevious = psCurrent;
     psCurrent = psCurrent->psNextBinding;
     while(psCurrent != NULL) {
-        if(SymTable_contains(oSymTable, pcKey)) {
+        if(!strcmp(psCurrent->pcKey, pcKey)) {
             psPrevious->psNextBinding = psCurrent->psNextBinding;
             free(psCurrent->pcKey);
             pvTempValue = psCurrent->pvValue;
