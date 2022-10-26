@@ -191,7 +191,6 @@ const void *pvExtra) {
     struct Binding *psCurrentBinding;
 
     assert(oSymTable != NULL);
-    assert(pcKey != NULL);
 
     psCurrentBinding = oSymTable->psFirstBinding;
     while(psNextBinding != NULL) {
