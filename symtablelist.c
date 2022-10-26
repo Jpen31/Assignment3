@@ -224,7 +224,6 @@ const void *pvExtra) {
 
     assert(oSymTable != NULL);
     assert(pfApply != NULL);
-    assert(pvExtra != NULL);
 
     /* applies pfApply to every binding in oSymTable */
     psCurrentBinding = oSymTable->psFirstBinding;
