@@ -23,6 +23,7 @@ struct SymTable
 SymTable_T SymTable_new(void) {
     SymTable_T oSymTable;
 
+    /* Allocates memory for oSymTable and the hash table */
     oSymTable = (SymTable_T)malloc(sizeof(struct SymTable));
     if(oSymTable == NULL) {
         return NULL;
@@ -35,14 +36,16 @@ SymTable_T SymTable_new(void) {
         return NULL;
     }
 
+    /* initializes parameters of oSymTable */
     oSymTable->bindings = 0;
     oSymTable->buckets = 0;
+    
     return oSymTable;
 }
 
 /* Return a hash code for pcKey that is between 0 and uBucketCount-1,
 inclusive. */
-static size_t SymTable_hash(const char *pcKey, size_t uBucketCount){
+static size_t SymTable_hash(const char *pcKey, size_t uBucketCount) {
     const size_t HASH_MULTIPLIER = 65599;
     size_t u;
     size_t uHash = 0;
@@ -83,32 +86,38 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
 const void *pvValue) {
-    struct Binding *psNewNode;
+    struct Binding *psNewBinding;
     size_t KeyHash;
     
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
+    /* checks if the symbol table aready contains the key */
     if(SymTable_contains(oSymTable, pcKey)) {
         return 0;
     }
-        
-    psNewNode = (struct Binding*)malloc(sizeof(struct Binding));
-    if (psNewNode == NULL) {
+
+    /* allocates memory for new binding and copy of pcKey */    
+    psNewBinding = (struct Binding*)malloc(sizeof(struct Binding));
+    if (psNewBinding == NULL) {
+        return 0;
+    }
+    psNewBinding->pcKey = 
+    (char*)malloc((strlen(pcKey) + 1) * sizeof(*pcKey));
+    if(psNewBinding->pcKey == NULL) {
+        free(psNewBinding);  
         return 0;
     }
 
-    psNewNode->pcKey = (char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
-    if(psNewNode->pcKey == NULL) {
-        free(psNewNode);  
-        return 0;
-    }
-
+    /* initializes values of psNewBinding */
     KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
-    strcpy(psNewNode->pcKey, pcKey);
-    psNewNode->pvValue = (char *) pvValue;
-    psNewNode->psNextBinding = (oSymTable->psHashTable)[oSymTable->buckets];
-    (oSymTable->psHashTable)[KeyHash] = psNewNode;
+    strcpy(psNewBinding->pcKey, pcKey);
+    psNewBinding->pvValue = (char *) pvValue;
+    psNewBinding->psNextBinding = 
+    (oSymTable->psHashTable)[oSymTable->buckets];
+    
+    /* updates oSymTable parameters */
+    (oSymTable->psHashTable)[KeyHash] = psNewBinding;
     (oSymTable->bindings)++;
 
     return 1;
@@ -124,6 +133,9 @@ const void *pvValue) {
     assert(pcKey != NULL);
 
     KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
+    
+    /* checks the appropriate hash bucket for pcKey and replaces the
+    value if found*/
     psChecker = oSymTable->psHashTable[KeyHash];
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
@@ -146,10 +158,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
 
     KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
 
-    if(oSymTable->psHashTable == NULL) {
-        return 0;
-    }
-
+    /* checks each binding of the appropriate hash bucket for pcKey */
     psChecker = (oSymTable->psHashTable)[KeyHash];
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
@@ -168,11 +177,10 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
-    if(oSymTable->psHashTable == NULL) {
-        return NULL;
-    }
-
     KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
+   
+    /* checks the appropriate hash bucket for pcKey and returns value
+    if found */
     psChecker = (oSymTable->psHashTable)[KeyHash];
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
@@ -194,8 +202,23 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     assert(pcKey != NULL);
     
     KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
-    psPrevious = (oSymTable->psHashTable)[KeyHash];
-    psCurrent = psPrevious;
+    
+    /* checks if first binding in appropriate hash bucket contains 
+    pcKey. Removes it if it does */
+    psCurrent = (oSymTable->psHashTable)[KeyHash];
+    if(!strcmp(psCurrent->pcKey, pcKey)) {
+        (oSymTable->psHashTable)[KeyHash] = psCurrent->psNextBinding;
+        free(psCurrent->pcKey);
+        pvTempValue = psCurrent->pvValue;
+        free(psCurrent);
+        (oSymTable->bindings)--;
+        return pvTempValue;
+    }
+
+    /* Checks all subsequent bindings in bucket. Removes it if 
+    if it contain pcKey. */
+    psPrevious = psCurrent;
+    psCurrent = psCurrent->psNextBinding;
     while(psCurrent != NULL) {
         if(!strcmp(psCurrent->pcKey, pcKey)) {
             psPrevious->psNextBinding = psCurrent->psNextBinding;
@@ -207,7 +230,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
         }
         psPrevious = psCurrent;
         psCurrent = psCurrent->psNextBinding;
-    }
+    } 
 
     return NULL;
 }
@@ -227,6 +250,7 @@ const void *pvExtra) {
             (char*) pvExtra);
             psCurrentBinding = psCurrentBinding->psNextBinding;
         }
+        bucket++;
     }
     
     return;

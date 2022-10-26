@@ -25,7 +25,8 @@ size_t SymTable_getLength(SymTable_T oSymTable);
 /* Puts pcKey/pvValue pair into oSymTable. Returns 1 (TRUE) if
 successful. Returns 0 (FALSE) if pcKey is already in oSymTable, leaving 
 oSymTable unchanged. Also returns 0 if there is insuffient memory. 
-oSymTable and pcKey cannot be NULL. */
+oSymTable and pcKey cannot be NULL. Creates a copy of pcKey but not of 
+pvValue. */
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
 const void *pvValue);
 
