@@ -1,27 +1,40 @@
+/*--------------------------------------------------------------------*/
+/* symtablelist.c                                                     */
+/* Author: Jacob Penstein                                             */
+/*--------------------------------------------------------------------*/
+
+#include <assert.h>
+#include <stdlib.h>
 #include "symtable.h"
 
+/* Each key/value pair is stored in a Binding. Bindings are linked to
+form a linked list symbol table. */
 struct Binding
 {
-    char *pcKey;
-    void *pvValue;
+    char *pcKey; /* Key */
+    void *pvValue; /* Value */
 
-    struct Binding *psNextBinding;
+    struct Binding *psNextBinding; /* Address of next binding */
 };
 
+/* SymTable is a structure that points to the first Binding and tracks
+total number of bindings. */
 struct SymTable
 {
-   struct Binding *psFirstBinding;
-   size_t bindings;
+   struct Binding *psFirstBinding; /* address of first binding */
+   size_t bindings; /* number of bindings in the linked list. */
 };
 
 SymTable_T SymTable_new(void) {
     SymTable_T oSymTable;
 
+    /* Allocates memory for oSymTable. */
     oSymTable = (SymTable_T)malloc(sizeof(struct SymTable));
     if (oSymTable == NULL) {
         return NULL;
     }
 
+    /* Initilizes oSymTable parameters. */
     oSymTable->psFirstBinding = NULL;
     oSymTable->bindings = 0;
     return oSymTable;
@@ -33,6 +46,7 @@ void SymTable_free(SymTable_T oSymTable) {
 
     assert(oSymTable != NULL);
 
+    /* frees each binding in oSymTable */
     for (psCurrentBinding = oSymTable->psFirstBinding;
         psCurrentBinding != NULL;
         psCurrentBinding = psNextBinding)
@@ -52,7 +66,7 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
 const void *pvValue) {
-    struct Binding *psNewNode;
+    struct Binding *psNewBinding;
     
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
@@ -60,22 +74,25 @@ const void *pvValue) {
     if(SymTable_contains(oSymTable, pcKey)) {
         return 0;
     }
-        
-    psNewNode = (struct Binding*)malloc(sizeof(struct Binding));
-    if (psNewNode == NULL) {
+    
+    /* allocates memory for new binding and for copy of key */
+    psNewBinding = (struct Binding*)malloc(sizeof(struct Binding));
+    if (psNewBinding == NULL) {
+        return 0;
+    }
+    psNewBinding->pcKey = (char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
+    if(psNewBinding->pcKey == NULL) {
+        free(psNewBinding);  
         return 0;
     }
 
-    psNewNode->pcKey = (char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
-    if(psNewNode->pcKey == NULL) {
-        free(psNewNode);  
-        return 0;
-    }
-
-    strcpy(psNewNode->pcKey, pcKey);
-    psNewNode->pvValue = (char *) pvValue;
-    psNewNode->psNextBinding = oSymTable->psFirstBinding;
-    oSymTable->psFirstBinding = psNewNode;
+    /* initializes values for paramters in the binding */
+    strcpy(psNewBinding->pcKey, pcKey);
+    psNewBinding->pvValue = (char *) pvValue;
+    psNewBinding->psNextBinding = oSymTable->psFirstBinding;
+    
+    /* inserts binding into lists and updates binding total */
+    oSymTable->psFirstBinding = psNewBinding;
     (oSymTable->bindings)++;
 
     return 1;
@@ -89,6 +106,7 @@ const void *pvValue) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
+    /* Searches for binding with pcKey. Replaces it if in the table*/
     psChecker = oSymTable->psFirstBinding;
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
@@ -108,10 +126,12 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
+    /* Checks if oSymTable is empty. */
     if(oSymTable->psFirstBinding == NULL) {
         return 0;
     }
-
+    
+    /* checks for pcKey in oSYmTable */
     psChecker = oSymTable->psFirstBinding;
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
@@ -129,10 +149,12 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
+    /* checks for empty oSymTable */
     if(oSymTable->psFirstBinding == NULL) {
         return NULL;
     }
 
+    /* checks for binding with pcKey in oSymTable */
     psChecker = oSymTable->psFirstBinding;
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
@@ -152,12 +174,12 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
+    /* checks for empty oSymTable */
     if(oSymTable->psFirstBinding == NULL) {
         return NULL;
     }
     
-    psCurrent = oSymTable->psFirstBinding;
-    
+    /* psCurrent = oSymTable->psFirstBinding;
     if(!strcmp(psCurrent->pcKey, pcKey)) {
         oSymTable->psFirstBinding = psCurrent->psNextBinding;
         free(psCurrent->pcKey);
@@ -180,7 +202,21 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
         }
         psPrevious = psCurrent;
         psCurrent = psCurrent->psNextBinding;
-    }
+    } */
+
+    psPrevious = oSymTable->psFirstBinding;
+    psCurrent = psPrevious;
+    while(psCurrent != NULL) {
+        if(!strcmp(psCurrent->pcKey, pcKey)) {
+            psPrevious->psNextBinding = psCurrent->psNextBinding;
+            free(psCurrent->pcKey);
+            pvTempValue = psCurrent->pvValue;
+            free(psCurrent);
+            (oSymTable->bindings)--;
+            return pvTempValue;
+        }
+        psPrevious = psCurrent;
+        psCurrent = psCurrent->psNextBinding;
 
     return NULL;
 }
@@ -193,6 +229,7 @@ const void *pvExtra) {
     assert(oSymTable != NULL);
     assert(pfApply != NULL);
 
+    /* applies pfApply to every binding in oSymTable */
     psCurrentBinding = oSymTable->psFirstBinding;
     while(psCurrentBinding != NULL) {
         pfApply(psCurrentBinding->pcKey, psCurrentBinding->pvValue, 
