@@ -218,6 +218,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
         }
         psPrevious = psCurrent;
         psCurrent = psCurrent->psNextBinding;
+    }
 
     return NULL;
 }
