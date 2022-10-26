@@ -97,7 +97,31 @@ const void *pvValue) {
 }
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
-const void *pvValue) {}
+const void *pvValue) {
+    struct Binding *psChecker;
+    void *pvTempValue;
+    size_t KeyHash;
+    size_t i = 0;
+    
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+
+    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
+    psChecker = oSymTable->psHashTable[i];
+    while(i < auBucketCounts[oSymTable->buckets]) {
+        while(psChecker != NULL) {
+            if(!strcmp(psChecker->pcKey, pcKey)) {
+                pvTempValue = psChecker->pvValue;
+                psChecker->pvValue = (char *) pvValue;
+                return pvTempValue;
+            }
+            psChecker = psChecker->psNextBinding;
+        }
+        i++;
+        psChecker = oSymTable->psHashTable[i];
+    }
+    return NULL;
+}
 
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     struct Binding *psChecker;
