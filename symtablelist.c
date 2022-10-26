@@ -180,7 +180,8 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
         return NULL;
     }
     
-    /* psCurrent = oSymTable->psFirstBinding;
+    /* checks if first binding contains pcKey. Eemoves it if it does */
+    psCurrent = oSymTable->psFirstBinding;
     if(!strcmp(psCurrent->pcKey, pcKey)) {
         oSymTable->psFirstBinding = psCurrent->psNextBinding;
         free(psCurrent->pcKey);
@@ -190,6 +191,8 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
         return pvTempValue;
     }
 
+    /* Checks all subsequent bindings. Removes them if they contain
+    pcKey. */
     psPrevious = psCurrent;
     psCurrent = psCurrent->psNextBinding;
     while(psCurrent != NULL) {
@@ -203,22 +206,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
         }
         psPrevious = psCurrent;
         psCurrent = psCurrent->psNextBinding;
-    } */
-
-    psPrevious = oSymTable->psFirstBinding;
-    psCurrent = psPrevious;
-    while(psCurrent != NULL) {
-        if(!strcmp(psCurrent->pcKey, pcKey)) {
-            psPrevious->psNextBinding = psCurrent->psNextBinding;
-            free(psCurrent->pcKey);
-            pvTempValue = psCurrent->pvValue;
-            free(psCurrent);
-            (oSymTable->bindings)--;
-            return pvTempValue;
-        }
-        psPrevious = psCurrent;
-        psCurrent = psCurrent->psNextBinding;
-    }
+    } 
 
     return NULL;
 }
