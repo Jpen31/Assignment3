@@ -300,7 +300,7 @@ static void testKeyOwnership(void)
 
 /*--------------------------------------------------------------------*/
 
-/* Test the SymTable_remove() function. */
+/* Test the SymTable_remove() function. 
 
 static void testRemove(void)
 {
