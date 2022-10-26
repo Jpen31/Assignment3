@@ -12,18 +12,24 @@
 form a linked list symbol table. */
 struct Binding
 {
-    char *pcKey; /* Key */
-    void *pvValue; /* Value */
+    /* Key */
+    char *pcKey; 
+    /* Value */
+    void *pvValue; 
 
-    struct Binding *psNextBinding; /* Address of next binding */
+    /* Address of next binding */
+    struct Binding *psNextBinding; 
 };
 
 /* SymTable is a structure that points to the first Binding and tracks
 total number of bindings. */
 struct SymTable
 {
-   struct Binding *psFirstBinding; /* address of first binding */
-   size_t bindings; /* number of bindings in the linked list. */
+   /* address of first binding */
+   struct Binding *psFirstBinding; 
+   
+   /* number of bindings in the linked list. */
+   size_t bindings; 
 };
 
 SymTable_T SymTable_new(void) {
@@ -218,6 +224,7 @@ const void *pvExtra) {
 
     assert(oSymTable != NULL);
     assert(pfApply != NULL);
+    assert(pvExtra != NULL);
 
     /* applies pfApply to every binding in oSymTable */
     psCurrentBinding = oSymTable->psFirstBinding;

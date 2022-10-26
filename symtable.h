@@ -22,7 +22,7 @@ void SymTable_free(SymTable_T oSymTable);
 cannot be NULL */
 size_t SymTable_getLength(SymTable_T oSymTable);
 
-/* Puts pcKey/pcValue pair into oSymTable. Returns 1 (TRUE) if
+/* Puts pcKey/pvValue pair into oSymTable. Returns 1 (TRUE) if
 successful. Returns 0 (FALSE) if pcKey is already in oSymTable, leaving 
 oSymTable unchanged. Also returns 0 if there is insuffient memory. 
 oSymTable and pcKey cannot be NULL. */
@@ -30,7 +30,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
 const void *pvValue);
 
 /* If oSymTable contains a pair with pcKey, replaces its value with
-pcValue and returns the old value. If oStymTable does not contain
+pvValue and returns the old value. If oStymTable does not contain
 pcKey, returns NULL. oSymTable and pcKey cannot be NULL. */
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
 const void *pvValue);
