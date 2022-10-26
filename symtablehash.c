@@ -64,7 +64,7 @@ void SymTable_free(SymTable_T oSymTable) {
     assert(oSymTable != NULL);
 
     while(bucket < auBucketCounts[oSymTable->buckets]) {
-        for (psCurrentBinding = oSymTable->psHashTable[bucket];
+        for (psCurrentBinding = (oSymTable->psHashTable)[bucket];
             psCurrentBinding != NULL;
             psCurrentBinding = psNextBinding) {
             psNextBinding = psCurrentBinding->psNextBinding;
