@@ -193,9 +193,9 @@ const void *pvExtra) {
     assert(oSymTable != NULL);
 
     psCurrentBinding = oSymTable->psFirstBinding;
-    while(psNextBinding != NULL) {
+    while(psCurrentBinding != NULL) {
         pfApply(psCurrentBinding->pcKey, psCurrentBinding->pvValue, 
-        pvExtra);
+        (char*) pvExtra);
         psCurrentBinding = psCurrentBinding->psNextBinding;
     }
 
