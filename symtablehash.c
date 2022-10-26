@@ -206,6 +206,11 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     
     KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
     
+     /* checks for empty oSymTable */
+    if((oSymTable->psHashTable)[KeyHash] == NULL) {
+        return NULL;
+    }
+    
     /* checks if first binding in appropriate hash bucket contains 
     pcKey. Removes it if it does */
     psCurrent = (oSymTable->psHashTable)[KeyHash];
