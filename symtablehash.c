@@ -176,7 +176,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     assert(pcKey != NULL);
     
     KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
-    psCurrent = (oSymTable->psHashTable)[KeyHash];
+   /* psCurrent = (oSymTable->psHashTable)[KeyHash];
     if(!strcmp(psCurrent->pcKey, pcKey)) {
         (oSymTable->psHashTable)[KeyHash] = psCurrent->psNextBinding;
         free(psCurrent->pcKey);
@@ -184,10 +184,10 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
         free(psCurrent);
         (oSymTable->bindings)--;
         return pvTempValue;
-    }
+    } */
 
-    psPrevious = psCurrent;
-    psCurrent = psCurrent->psNextBinding;
+    psPrevious = (oSymTable->psHashTable)[KeyHash];
+    psCurrent = (oSymTable->psHashTable)[KeyHash];
     while(psCurrent != NULL) {
         if(!strcmp(psCurrent->pcKey, pcKey)) {
             psPrevious->psNextBinding = psCurrent->psNextBinding;
