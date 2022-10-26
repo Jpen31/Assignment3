@@ -112,7 +112,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
         return 0;
     }
 
-    psChecker = (oSymTable->psHashTable([KeyHash];
+    psChecker = (oSymTable->psHashTable)[KeyHash];
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
             return 1;
