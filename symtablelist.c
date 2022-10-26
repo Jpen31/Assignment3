@@ -5,6 +5,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include "symtable.h"
 
 /* Each key/value pair is stored in a Binding. Bindings are linked to
