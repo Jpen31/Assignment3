@@ -57,7 +57,7 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount){
 }
 
 void SymTable_free(SymTable_T oSymTable) {
-    /* struct Binding *psCurrentBinding;
+    struct Binding *psCurrentBinding;
     struct Binding *psNextBinding;
     size_t bucket = 0;
 
@@ -73,8 +73,8 @@ void SymTable_free(SymTable_T oSymTable) {
         }
         bucket++;
     }
-    
-    free(oSymTable); */
+    free(oSymTable->psHashTable);
+    free(oSymTable);
 }
 
 size_t SymTable_getLength(SymTable_T oSymTable) {
