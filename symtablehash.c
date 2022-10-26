@@ -166,7 +166,43 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     return NULL;
 }
 
-void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {}
+void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
+    struct Binding *psCurrent;
+    struct Binding *psPrevious;
+    void *pvTempValue;
+    size_t KeyHash;
+    
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+    
+    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
+    psCurrent = oSymTable->psHashTable[KeyHash];
+    if(!strcmp(psCurrent->pcKey, pcKey)) {
+        oSymTable->psHashTable[KeyHash] = psCurrent->psNextBinding;
+        free(psCurrent->pcKey);
+        pvTempValue = psCurrent->pvValue;
+        free(psCurrent);
+        (oSymTable->bindings)--;
+        return pvTempValue;
+    }
+
+    psPrevious = psCurrent;
+    psCurrent = psCurrent->psNextBinding;
+    while(psCurrent != NULL) {
+        if(!strcmp(psCurrent->pcKey, pcKey)) {
+            psPrevious->psNextBinding = psCurrent->psNextBinding;
+            free(psCurrent->pcKey);
+            pvTempValue = psCurrent->pvValue;
+            free(psCurrent);
+            (oSymTable->bindings)--;
+            return pvTempValue;
+        }
+        psPrevious = psCurrent;
+        psCurrent = psCurrent->psNextBinding;
+    }
+
+    return NULL;
+}
 
 void SymTable_map(SymTable_T oSymTable,
 void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
