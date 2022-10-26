@@ -952,7 +952,7 @@ int main(int argc, char *argv[])
    testBasics();
    testKeyComparison();
    testKeyOwnership();
-   testRemove();
+   /* testRemove(); */
    testMap();
    testEmptyTable();
    testEmptyKey();
