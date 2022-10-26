@@ -73,7 +73,6 @@ void SymTable_free(SymTable_T oSymTable) {
         }
         bucket++;
     }
-    free(oSymTable->psHashTable);
     free(oSymTable);
 }
 
