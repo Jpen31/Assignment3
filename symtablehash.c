@@ -56,7 +56,25 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount){
     return uHash % uBucketCount;
 }
 
-void SymTable_free(SymTable_T oSymTable) {}
+void SymTable_free(SymTable_T oSymTable) {
+    struct Binding *psCurrentBinding;
+    struct Binding *psNextBinding;
+    size_t bucket = 0;
+
+    assert(oSymTable != NULL);
+
+    while(bucket < auBucketCounts[oSymTable->buckets]) {
+        for (psCurrentBinding = oSymTable->psHashTable[bucket];
+            psCurrentBinding != NULL;
+            psCurrentBinding = psNextBinding) {
+            psNextBinding = psCurrentBinding->psNextBinding;
+            free(psCurrentBinding->pcKey);
+            free(psCurrentBinding);
+        }
+        bucket++;
+    }
+    free(oSymTable);
+}
 
 size_t SymTable_getLength(SymTable_T oSymTable) {
     assert(oSymTable != NULL);
@@ -176,18 +194,8 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     assert(pcKey != NULL);
     
     KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
-   /* psCurrent = (oSymTable->psHashTable)[KeyHash];
-    if(!strcmp(psCurrent->pcKey, pcKey)) {
-        (oSymTable->psHashTable)[KeyHash] = psCurrent->psNextBinding;
-        free(psCurrent->pcKey);
-        pvTempValue = psCurrent->pvValue;
-        free(psCurrent);
-        (oSymTable->bindings)--;
-        return pvTempValue;
-    } */
-
     psPrevious = (oSymTable->psHashTable)[KeyHash];
-    psCurrent = (oSymTable->psHashTable)[KeyHash];
+    psCurrent = psPrevious;
     while(psCurrent != NULL) {
         if(!strcmp(psCurrent->pcKey, pcKey)) {
             psPrevious->psNextBinding = psCurrent->psNextBinding;
