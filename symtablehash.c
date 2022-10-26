@@ -214,4 +214,20 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
 
 void SymTable_map(SymTable_T oSymTable,
 void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
-const void *pvExtra) {}
+const void *pvExtra) {
+    struct Binding *psCurrentBinding;
+    size_t bucket = 0;
+
+    assert(oSymTable != NULL);
+
+    while(bucket < auBucketCounts[oSymTable->buckets]) {
+        psCurrentBinding = oSymTable->psHashTable[bucket];
+        while(psCurrentBinding != NULL) {
+            pfApply(psCurrentBinding->pcKey, psCurrentBinding->pvValue, 
+            (char*) pvExtra);
+            psCurrentBinding = psCurrentBinding->psNextBinding;
+        }
+    }
+    
+    return;
+}
