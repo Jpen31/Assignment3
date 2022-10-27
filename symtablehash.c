@@ -53,7 +53,7 @@ SymTable_T SymTable_new(void) {
         return NULL;
     }
     oSymTable->psHashTable = (struct Binding**)
-    calloc(sizeof(struct Binding*), auBucketCounts[0]);
+    calloc(sizeof(struct Binding*), auBucketCounts[7]);
     if(oSymTable->psHashTable == NULL) {
         free(oSymTable);
         return NULL;
@@ -61,7 +61,7 @@ SymTable_T SymTable_new(void) {
 
     /* initializes parameters of oSymTable */
     oSymTable->bindings = 0;
-    oSymTable->buckets = 0;
+    oSymTable->buckets = 7;
     
     return oSymTable;
 }
@@ -160,12 +160,13 @@ static SymTable_T SymTable_expand(SymTable_T oSymTable) {
             success = SymTable_put(oNewSymTable, 
             psCurrentBinding->pcKey, psCurrentBinding->pvValue);
             
-            /* if(success == 0) {
+            if(success == 0) {
                 free(oNewSymTable);
                 return oSymTable; 
-            } */
+            } 
         }
         bucket++;
+        
     }
     printf("table expanded\n");
     fflush(stdout);
@@ -187,11 +188,11 @@ const void *pvValue) {
         return 0;
     }
 
-    if(oSymTable->bindings >= auBucketCounts[oSymTable->buckets]) {
+    /* if(oSymTable->bindings >= auBucketCounts[oSymTable->buckets]) {
         printf("expansion triggered\n");
         fflush(stdout);
         oSymTable = SymTable_expand(oSymTable);
-    }
+    } *
 
     /* allocates memory for new binding and copy of pcKey */    
     psNewBinding = (struct Binding*)malloc(sizeof(struct Binding));
