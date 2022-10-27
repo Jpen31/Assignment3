@@ -1,10 +1,18 @@
+/*--------------------------------------------------------------------*/
+/* symtablehash.c                                                     */
+/* Author: Jacob Penstein                                             */
+/*--------------------------------------------------------------------*/
+
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include "symtable.h"
 
+/* array of bucket count sizes for hash expansion */
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
 16381, 32749, 65521};
+
+/* total number of buckets counts */
 static const size_t numBucketCounts = 
 sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
 
@@ -43,7 +51,6 @@ SymTable_T SymTable_new(void) {
     if(oSymTable == NULL) {
         return NULL;
     }
-
     oSymTable->psHashTable = (struct Binding**)
     malloc(sizeof(struct Binding*) * auBucketCounts[0]);
     if(oSymTable->psHashTable == NULL) {
@@ -262,6 +269,7 @@ const void *pvExtra) {
     size_t bucket = 0;
 
     assert(oSymTable != NULL);
+    assert(pfApply != NULL);
 
     while(bucket < auBucketCounts[oSymTable->buckets]) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
