@@ -168,6 +168,7 @@ static void SymTable_expand(SymTable_T oSymTable) {
     oSymTable->psHashTable = psNewHashTable;
 
     (oSymTable->buckets)++;
+    (oNewSymTable->buckets)--;
     free(oNewSymTable);
 
 }
