@@ -98,7 +98,11 @@ void SymTable_free(SymTable_T oSymTable) {
         }
         bucket++;
     }
+    printf("preFree \n");
+    fflush(stdout);
     free(oSymTable->psHashTable);
+     printf("post-Free \n");
+     fflush(stdout);
     free(oSymTable);
 }
 
