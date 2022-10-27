@@ -124,6 +124,10 @@ const void *pvValue) {
         return 0;
     }
 
+    if(oSymTable->bindings == auBucketCounts[oSymTable->buckets]) {
+        oSymTable = SymTable_expand(oSymTable);
+    }
+
     /* allocates memory for new binding and copy of pcKey */    
     psNewBinding = (struct Binding*)malloc(sizeof(struct Binding));
     if (psNewBinding == NULL) {
@@ -148,6 +152,63 @@ const void *pvValue) {
     (oSymTable->bindings)++;
 
     return 1;
+}
+
+/*  */
+static SymTable_T SymTable_expand(oSymTable) {
+    struct SymTable oNewSymTable;
+    struct Binding *psCurrentBinding;
+    size_t bucket = 0; 
+    int success;
+    
+    if(oSymTable->bindings == numBucketCounts) {
+        return oSymTable;
+    }
+    
+    oNewSymTable = SymTable_ExpandNew(oSymTable->buckets + 1);
+    if(oNewSymTable = NULL) {
+        return oSymTable;
+    }
+
+    while(bucket < auBucketCounts[oSymTable->buckets]) {
+        psCurrentBinding = oSymTable->psHashTable[bucket];
+        while(psCurrentBinding != NULL) {
+            success = SymTable_put(oNewSymTable, 
+            psCurrentBinding->pcKey, psCurrentBinding->pcValue);
+            
+            if(success == 0) {
+                free(oNewSymTable);
+                return oSymTable;
+            }
+        }
+        bucket++;
+    }
+
+    free(oSymTable);
+    return oNewSymTable;
+
+}
+
+static SymTable_T SymTable_ExpandNew(size_t buckets) {
+    SymTable_T oSymTable;
+
+    /* Allocates memory for oSymTable and the hash table */
+    oSymTable = (SymTable_T)malloc(sizeof(struct SymTable));
+    if(oSymTable == NULL) {
+        return NULL;
+    }
+    oSymTable->psHashTable = (struct Binding**)
+    calloc(sizeof(struct Binding*), auBucketCounts[buckets]);
+    if(oSymTable->psHashTable == NULL) {
+        free(oSymTable);
+        return NULL;
+    }
+
+    /* initializes parameters of oSymTable */
+    oSymTable->bindings = 0;
+    oSymTable->buckets = buckets;
+    
+    return oSymTable;
 }
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
