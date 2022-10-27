@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "symtable.h"
+#include <stdio.h>
 
 /* array of bucket count sizes for hash expansion */
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
