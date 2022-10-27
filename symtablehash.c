@@ -139,11 +139,11 @@ static SymTable_T SymTable_expand(SymTable_T oSymTable) {
     size_t bucket = 0; 
     int success;
     
-    if(oSymTable->bindings == numBucketCounts) {
+    if(oSymTable->buckets == numBucketCounts) {
         return oSymTable;
     }
     
-    oNewSymTable = SymTable_ExpandNew(oSymTable->buckets + 1);
+    oNewSymTable = SymTable_ExpandNew((oSymTable->buckets) + 1);
     if(oNewSymTable == NULL) {
         return oSymTable;
     }
