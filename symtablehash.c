@@ -192,7 +192,7 @@ const void *pvValue) {
         printf("expansion triggered\n");
         fflush(stdout);
         oSymTable = SymTable_expand(oSymTable);
-    } *
+    } */
 
     /* allocates memory for new binding and copy of pcKey */    
     psNewBinding = (struct Binding*)malloc(sizeof(struct Binding));
