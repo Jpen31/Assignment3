@@ -141,12 +141,12 @@ static void SymTable_expand(SymTable_T oSymTable) {
     int success;
     
     if(oSymTable->buckets == numBucketCounts) {
-        return oSymTable;
+        return;
     }
     
     oNewSymTable = SymTable_ExpandNew((oSymTable->buckets) + 1);
     if(oNewSymTable == NULL) {
-        return oSymTable;
+        return;
     }
 
     while(bucket < auBucketCounts[oSymTable->buckets]) {
@@ -157,15 +157,17 @@ static void SymTable_expand(SymTable_T oSymTable) {
             
             if(success == 0) {
                 free(oNewSymTable);
-                return oSymTable;
+                return;
             }
         }
         bucket++;
     }
+    
     psNewHashTable = oNewSymTable->psHashTable;
     oNewSymTable->psHashTable = oSymTable->psHashTable;
     oSymTable->psHashTable = psNewHashTable;
 
+    (oSymTable->buckets)++;
     free(oNewSymTable);
 
 }
