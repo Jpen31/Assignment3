@@ -144,7 +144,7 @@ static SymTable_T SymTable_expand(SymTable_T oSymTable) {
     }
     
     oNewSymTable = SymTable_ExpandNew(oSymTable->buckets + 1);
-    if(oNewSymTable = NULL) {
+    if(oNewSymTable == NULL) {
         return oSymTable;
     }
 
@@ -152,7 +152,7 @@ static SymTable_T SymTable_expand(SymTable_T oSymTable) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
         while(psCurrentBinding != NULL) {
             success = SymTable_put(oNewSymTable, 
-            psCurrentBinding->pcKey, psCurrentBinding->pcValue);
+            psCurrentBinding->pcKey, psCurrentBinding->pvValue);
             
             if(success == 0) {
                 free(oNewSymTable);
