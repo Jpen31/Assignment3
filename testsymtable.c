@@ -950,7 +950,7 @@ int main(int argc, char *argv[])
 #endif
 
    testBasics();
-   testKeyComparison();
+   /* testKeyComparison(); */
    testKeyOwnership();
    testRemove();
    testMap();
