@@ -133,20 +133,19 @@ static SymTable_T SymTable_ExpandNew(size_t buckets) {
     return oSymTable;
 }
 
-static void SymTable_expand(SymTable_T oSymTable) {
+static SymTable_T SymTable_expand(SymTable_T oSymTable) {
     SymTable_T oNewSymTable;
-    struct Binding **psNewHashTable;
     struct Binding *psCurrentBinding;
     size_t bucket = 0; 
     int success;
     
     if(oSymTable->buckets == numBucketCounts) {
-        return;
+        return oSymTable;
     }
     
     oNewSymTable = SymTable_ExpandNew((oSymTable->buckets) + 1);
     if(oNewSymTable == NULL) {
-        return;
+        return oSymTable;
     }
 
     while(bucket < auBucketCounts[oSymTable->buckets]) {
@@ -157,19 +156,15 @@ static void SymTable_expand(SymTable_T oSymTable) {
             
             if(success == 0) {
                 free(oNewSymTable);
-                return;
+                return oSymTable;
             }
         }
         bucket++;
     }
-    
-    psNewHashTable = oNewSymTable->psHashTable;
-    oNewSymTable->psHashTable = oSymTable->psHashTable;
-    oSymTable->psHashTable = psNewHashTable;
-
-    (oSymTable->buckets)++;
-    (oNewSymTable->buckets)--;
-    free(oNewSymTable);
+    prinf("table expanded");
+    fflush(stdout);
+    free(oSymTable);
+    return oNewSymTable;
 
 }
 
@@ -187,7 +182,7 @@ const void *pvValue) {
     }
 
     if(oSymTable->bindings == auBucketCounts[oSymTable->buckets]) {
-        SymTable_expand(oSymTable);
+        oSymTable = SymTable_expand(oSymTable);
     }
 
     /* allocates memory for new binding and copy of pcKey */    
