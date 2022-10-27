@@ -155,7 +155,7 @@ const void *pvValue) {
 }
 
 /*  */
-static SymTable_T SymTable_expand(oSymTable) {
+static struct SymTable SymTable_expand(oSymTable) {
     struct SymTable oNewSymTable;
     struct Binding *psCurrentBinding;
     size_t bucket = 0; 
@@ -189,7 +189,7 @@ static SymTable_T SymTable_expand(oSymTable) {
 
 }
 
-static SymTable_T SymTable_ExpandNew(size_t buckets) {
+static struct SymTable SymTable_ExpandNew(size_t buckets) {
     SymTable_T oSymTable;
 
     /* Allocates memory for oSymTable and the hash table */
