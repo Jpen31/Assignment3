@@ -111,6 +111,28 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
     return oSymTable->bindings;
 }
 
+static SymTable_T SymTable_ExpandNew(size_t buckets) {
+    SymTable_T oSymTable;
+
+    /* Allocates memory for oSymTable and the hash table */
+    oSymTable = (SymTable_T)malloc(sizeof(struct SymTable));
+    if(oSymTable == NULL) {
+        return NULL;
+    }
+    oSymTable->psHashTable = (struct Binding**)
+    calloc(sizeof(struct Binding*), auBucketCounts[buckets]);
+    if(oSymTable->psHashTable == NULL) {
+        free(oSymTable);
+        return NULL;
+    }
+
+    /* initializes parameters of oSymTable */
+    oSymTable->bindings = 0;
+    oSymTable->buckets = buckets;
+    
+    return oSymTable;
+}
+
 static SymTable_T SymTable_expand(SymTable_T oSymTable) {
     SymTable_T oSymTable;
     struct Binding *psCurrentBinding;
@@ -186,28 +208,6 @@ const void *pvValue) {
     (oSymTable->bindings)++;
 
     return 1;
-}
-
-static SymTable_T SymTable_ExpandNew(size_t buckets) {
-    SymTable_T oSymTable;
-
-    /* Allocates memory for oSymTable and the hash table */
-    oSymTable = (SymTable_T)malloc(sizeof(struct SymTable));
-    if(oSymTable == NULL) {
-        return NULL;
-    }
-    oSymTable->psHashTable = (struct Binding**)
-    calloc(sizeof(struct Binding*), auBucketCounts[buckets]);
-    if(oSymTable->psHashTable == NULL) {
-        free(oSymTable);
-        return NULL;
-    }
-
-    /* initializes parameters of oSymTable */
-    oSymTable->bindings = 0;
-    oSymTable->buckets = buckets;
-    
-    return oSymTable;
 }
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
