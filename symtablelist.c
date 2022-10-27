@@ -95,7 +95,7 @@ const void *pvValue) {
 
     /* initializes values for paramters in the binding */
     strcpy(psNewBinding->pcKey, pcKey);
-    psNewBinding->pvValue = (char *) pvValue;
+    psNewBinding->pvValue = (void *) pvValue;
     psNewBinding->psNextBinding = oSymTable->psFirstBinding;
     
     /* inserts binding into lists and updates binding total */

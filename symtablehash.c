@@ -125,7 +125,7 @@ const void *pvValue) {
         return 0;
     }
     psNewBinding->pcKey = 
-    (char*)malloc((strlen(pcKey) + 1) * sizeof(*pcKey));
+    (char*)malloc((strlen(pcKey) + 1));
     if(psNewBinding->pcKey == NULL) {
         free(psNewBinding);  
         return 0;
@@ -134,9 +134,9 @@ const void *pvValue) {
     /* initializes values of psNewBinding */
     KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
     strcpy(psNewBinding->pcKey, pcKey);
-    psNewBinding->pvValue = (char *) pvValue;
+    psNewBinding->pvValue = (void *) pvValue;
     psNewBinding->psNextBinding = 
-    (oSymTable->psHashTable)[oSymTable->buckets];
+    (oSymTable->psHashTable)[KeyHash];
     
     /* updates oSymTable parameters */
     (oSymTable->psHashTable)[KeyHash] = psNewBinding;
@@ -225,7 +225,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     
     KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
     
-     /* checks for empty oSymTable */
+     /* checks for empty bucket */
     if((oSymTable->psHashTable)[KeyHash] == NULL) {
         return NULL;
     }
@@ -271,6 +271,7 @@ const void *pvExtra) {
     assert(oSymTable != NULL);
     assert(pfApply != NULL);
 
+    /* applies pfApply to each binding in every bucket */
     while(bucket < auBucketCounts[oSymTable->buckets]) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
         while(psCurrentBinding != NULL) {

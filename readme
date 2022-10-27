@@ -3,7 +3,7 @@ Assignment 3 readme File
 ------------------------------------------------------------------------
 What is your name?
 
-
+Jacob Penstein
 
 ------------------------------------------------------------------------
 What authorized sources of information did you use to complete the
@@ -26,7 +26,7 @@ interaction, may additionally require the interaction being reported
 to the Committee on Discipline. Write "None" if you used no
 unauthorized sources of information.
 
-
+None
 
 ------------------------------------------------------------------------
 What is your assessment of the assignment? Was it helpful? Was it fun?
@@ -72,7 +72,8 @@ disagreements with them? Copy the splint warnings here, and express your
 disagreement after each warning. If there are no warnings, then write
 "None."
 
-
+symtablehash.c: (in function SymTable_map)
+symtablehash.c:257:13: Statement has no effect: pfApply(psCurren...
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on symtablehash.c, and what are your
@@ -80,7 +81,14 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
+symtablehash.c: line 110: medium priority:
+Do you want to validate 'pvValue' through an assert?
 
+symtablehash.c: line 149: medium priority:
+Do you want to validate 'pvValue' through an assert?
+
+symtablehash.c: line 267: medium priority:
+Do you want to validate 'pvExtra' through an assert?
 
 ------------------------------------------------------------------------
 What are the CPU times reported by testsymtable.c with binding counts
