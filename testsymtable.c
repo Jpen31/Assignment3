@@ -949,7 +949,7 @@ int main(int argc, char *argv[])
    setCpuTimeLimit();
 #endif
 
-   /* testBasics(); */
+   testBasics();
    testKeyComparison();
    testKeyOwnership();
    testRemove();
