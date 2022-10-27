@@ -8,19 +8,33 @@ static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191,
 static const size_t numBucketCounts = 
 sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
 
+/* Each key/value pair is stored in a Binding. Bindings are each found
+in a linked list beginning at a bucket in the hush table. */
 struct Binding
 {
+    /* key */
     char *pcKey;
+    /* value */
     void *pvValue;
 
+    /* address of next binding */
     struct Binding *psNextBinding;
 };
 
+/* SymTable is a structure that points to the first Binding and tracks
+total number of bindings. */
 struct SymTable
 {
+   /* pointer to hash table, an array of pointers to bindings  */
    struct Binding **psHashTable;
+   
+   /* number of bindings */
    size_t bindings;
+   
+   /* index to keep track of number of buckets */
    size_t buckets;
+   /* incrementer for auBucketCounts */
+   size_t BucketCount;
 };
 
 SymTable_T SymTable_new(void) {
@@ -41,7 +55,8 @@ SymTable_T SymTable_new(void) {
 
     /* initializes parameters of oSymTable */
     oSymTable->bindings = 0;
-    oSymTable->buckets = 0;
+    oSymTable->BucketCount = 0;
+    oSymTable->buckets = auBucketCounts[oSymTable->BucketCount];
     
     return oSymTable;
 }
@@ -69,7 +84,7 @@ void SymTable_free(SymTable_T oSymTable) {
 
     assert(oSymTable != NULL);
 
-    while(bucket < auBucketCounts[oSymTable->buckets]) {
+    while(bucket < oSymTable->buckets) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
         while(psCurrentBinding != NULL) {
             psNextBinding = psCurrentBinding->psNextBinding;
@@ -113,7 +128,7 @@ const void *pvValue) {
     }
 
     /* initializes values of psNewBinding */
-    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
+    KeyHash = SymTable_hash(pcKey, oSymTable->buckets);
     strcpy(psNewBinding->pcKey, pcKey);
     psNewBinding->pvValue = (char *) pvValue;
     psNewBinding->psNextBinding = 
@@ -135,7 +150,7 @@ const void *pvValue) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
-    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
+    KeyHash = SymTable_hash(pcKey, oSymTable->buckets);
     
     /* checks the appropriate hash bucket for pcKey and replaces the
     value if found*/
@@ -159,7 +174,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
-    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
+    KeyHash = SymTable_hash(pcKey, oSymTable->buckets);
 
     /* checks each binding of the appropriate hash bucket for pcKey */
     psChecker = (oSymTable->psHashTable)[KeyHash];
@@ -180,7 +195,7 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
 
-    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
+    KeyHash = SymTable_hash(pcKey, oSymTable->buckets);
    
     /* checks the appropriate hash bucket for pcKey and returns value
     if found */
@@ -204,7 +219,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
     
-    KeyHash = SymTable_hash(pcKey, auBucketCounts[oSymTable->buckets]);
+    KeyHash = SymTable_hash(pcKey, oSymTable->buckets);
     
      /* checks for empty oSymTable */
     if((oSymTable->psHashTable)[KeyHash] == NULL) {
@@ -251,7 +266,7 @@ const void *pvExtra) {
 
     assert(oSymTable != NULL);
 
-    while(bucket < auBucketCounts[oSymTable->buckets]) {
+    while(bucket < oSymTable->buckets) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
         while(psCurrentBinding != NULL) {
             pfApply(psCurrentBinding->pcKey, psCurrentBinding->pvValue, 
