@@ -160,9 +160,9 @@ static SymTable_T SymTable_expand(SymTable_T oSymTable) {
             success = SymTable_put(oNewSymTable, 
             psCurrentBinding->pcKey, psCurrentBinding->pvValue);
             
-            if(success == 0) {
+            /* if(success == 0) {
                 free(oNewSymTable);
-                return oSymTable;
+                return oSymTable; */
             }
         }
         bucket++;
