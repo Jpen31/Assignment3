@@ -111,6 +111,40 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
     return oSymTable->bindings;
 }
 
+static SymTable_T SymTable_expand(SymTable_T oSymTable) {
+    SymTable_T oSymTable;
+    struct Binding *psCurrentBinding;
+    size_t bucket = 0; 
+    int success;
+    
+    if(oSymTable->bindings == numBucketCounts) {
+        return oSymTable;
+    }
+    
+    oNewSymTable = SymTable_ExpandNew(oSymTable->buckets + 1);
+    if(oNewSymTable = NULL) {
+        return oSymTable;
+    }
+
+    while(bucket < auBucketCounts[oSymTable->buckets]) {
+        psCurrentBinding = oSymTable->psHashTable[bucket];
+        while(psCurrentBinding != NULL) {
+            success = SymTable_put(oNewSymTable, 
+            psCurrentBinding->pcKey, psCurrentBinding->pcValue);
+            
+            if(success == 0) {
+                free(oNewSymTable);
+                return oSymTable;
+            }
+        }
+        bucket++;
+    }
+
+    free(oSymTable);
+    return oNewSymTable;
+
+}
+
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
 const void *pvValue) {
     struct Binding *psNewBinding;
@@ -152,41 +186,6 @@ const void *pvValue) {
     (oSymTable->bindings)++;
 
     return 1;
-}
-
-/*  */
-static SymTable_T SymTable_expand(SymTable_T oSymTable) {
-    SymTable_T oSymTable;
-    struct Binding *psCurrentBinding;
-    size_t bucket = 0; 
-    int success;
-    
-    if(oSymTable->bindings == numBucketCounts) {
-        return oSymTable;
-    }
-    
-    oNewSymTable = SymTable_ExpandNew(oSymTable->buckets + 1);
-    if(oNewSymTable = NULL) {
-        return oSymTable;
-    }
-
-    while(bucket < auBucketCounts[oSymTable->buckets]) {
-        psCurrentBinding = oSymTable->psHashTable[bucket];
-        while(psCurrentBinding != NULL) {
-            success = SymTable_put(oNewSymTable, 
-            psCurrentBinding->pcKey, psCurrentBinding->pcValue);
-            
-            if(success == 0) {
-                free(oNewSymTable);
-                return oSymTable;
-            }
-        }
-        bucket++;
-    }
-
-    free(oSymTable);
-    return oNewSymTable;
-
 }
 
 static SymTable_T SymTable_ExpandNew(size_t buckets) {
