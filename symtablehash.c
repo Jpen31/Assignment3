@@ -112,7 +112,7 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 }
 
 static SymTable_T SymTable_ExpandNew(size_t buckets) {
-    SymTable_T oSymTable;
+    SymTable_T oNewSymTable;
 
     /* Allocates memory for oSymTable and the hash table */
     oSymTable = (SymTable_T)malloc(sizeof(struct SymTable));
