@@ -101,7 +101,7 @@ void SymTable_free(SymTable_T oSymTable) {
     }
     printf("preFree \n");
     fflush(stdout);
-    /* free(oSymTable->psHashTable); */
+    free(oSymTable->psHashTable);
      printf("post-Free \n");
      fflush(stdout);
     free(oSymTable);
