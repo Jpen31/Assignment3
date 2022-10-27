@@ -53,7 +53,7 @@ SymTable_T SymTable_new(void) {
         return NULL;
     }
     oSymTable->psHashTable = (struct Binding**)
-    malloc(sizeof(struct Binding*) * auBucketCounts[0]);
+    calloc(sizeof(struct Binding*), auBucketCounts[0]);
     if(oSymTable->psHashTable == NULL) {
         free(oSymTable);
         return NULL;
