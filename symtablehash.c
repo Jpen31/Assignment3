@@ -155,7 +155,7 @@ const void *pvValue) {
 }
 
 /*  */
-static SymTable_T SymTable_expand(oSymTable) {
+static SymTable_T SymTable_expand(SymTable_T oSymTable) {
     SymTable_T oSymTable;
     struct Binding *psCurrentBinding;
     size_t bucket = 0; 
