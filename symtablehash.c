@@ -180,9 +180,9 @@ const void *pvValue) {
         return 0;
     }
 
-    /* if(oSymTable->bindings == auBucketCounts[oSymTable->buckets]) {
+    if(oSymTable->bindings == auBucketCounts[oSymTable->buckets]) {
         oSymTable = SymTable_expand(oSymTable);
-    } */
+    }
 
     /* allocates memory for new binding and copy of pcKey */    
     psNewBinding = (struct Binding*)malloc(sizeof(struct Binding));
