@@ -89,6 +89,7 @@ void SymTable_free(SymTable_T oSymTable) {
 
     assert(oSymTable != NULL);
 
+    /* frees each binding in each of the buckets of the hash table */
     while(bucket < auBucketCounts[oSymTable->buckets]) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
         while(psCurrentBinding != NULL) {
@@ -99,11 +100,9 @@ void SymTable_free(SymTable_T oSymTable) {
         }
         bucket++;
     }
-    printf("preFree \n");
-    fflush(stdout);
+    
+    /* frees hash table array and symbol table */
     free(oSymTable->psHashTable);
-     printf("post-Free \n");
-     fflush(stdout);
     free(oSymTable);
 }
 
