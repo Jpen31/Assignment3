@@ -162,8 +162,8 @@ static SymTable_T SymTable_expand(SymTable_T oSymTable) {
             
             /* if(success == 0) {
                 free(oNewSymTable);
-                return oSymTable; */
-            }
+                return oSymTable; 
+            } */
         }
         bucket++;
     }
