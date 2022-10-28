@@ -13,10 +13,6 @@
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
 16381, 32749, 65521};
 
-/* total number of buckets counts */
-static const size_t numBucketCounts = 
-sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
-
 /* Each key/value pair is stored in a Binding. Bindings are each found
 in a linked list beginning at a bucket in the hush table. */
 struct Binding
@@ -111,6 +107,9 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
     return oSymTable->bindings;
 }
 
+/* Creates a new SymTable_T object with an expanded hash table, based
+on the size of the incrementer buckets. Returns the symbol table if
+succesfful and NULL if not. */
 static SymTable_T SymTable_ExpandNew(size_t buckets) {
     SymTable_T oSymTable;
 
@@ -133,29 +132,38 @@ static SymTable_T SymTable_ExpandNew(size_t buckets) {
     return oSymTable;
 }
 
+/* Expands the size of oSymTables hash table. If not possible, will
+not change oSymTable. */
 static void SymTable_expand(SymTable_T oSymTable) {
     SymTable_T oNewSymTable;
     struct Binding **psOldHashTable;
     struct Binding *psCurrentBinding;
-    size_t bucket = 0; 
-    int success;
+    size_t bucket; 
+    size_t numBucketCounts = 
+    sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
+    size_t newBucketCount = (oSymTable->buckets) + 1;
     
-    if(oSymTable->buckets >= numBucketCounts - 2) {
+    /* Checks if it is possible to add more buckets */
+    if(newBucketCount + 1 >= numBucketCounts) {
         return;
     }
 
-    oNewSymTable = SymTable_ExpandNew((oSymTable->buckets) + 1);
+    /* Creates a new, temporary symbol table. If not possible, maintains
+    original symbol table. */
+    oNewSymTable = SymTable_ExpandNew(newBucketCount);
     if(oNewSymTable == NULL) {
         return;
     }
 
-
+    /* Copies all keys from the old hash table to the new hash table. */
+    bucket = 0;
     while(bucket < auBucketCounts[oSymTable->buckets]) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
         while(psCurrentBinding != NULL) {
-            success = SymTable_put(oNewSymTable, 
+            int success = SymTable_put(oNewSymTable, 
             psCurrentBinding->pcKey, psCurrentBinding->pvValue);
             
+            /* Checks all keys are successfully copied. */
             if(success == 0) {
                 free(oNewSymTable);
                 return; 
@@ -165,10 +173,12 @@ static void SymTable_expand(SymTable_T oSymTable) {
         }
         bucket++;
     }
+    /* transfers new expanded hash table to symbol table */
     psOldHashTable = oSymTable->psHashTable;
     oSymTable->psHashTable = oNewSymTable->psHashTable;
     (oSymTable->buckets)++;
 
+    /* frees temporary symbol table and old hash table */
     (oNewSymTable->buckets)--;
     oNewSymTable->psHashTable = psOldHashTable;
     SymTable_free(oNewSymTable);
