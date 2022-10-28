@@ -143,17 +143,12 @@ static void SymTable_expand(SymTable_T oSymTable) {
     if(oSymTable->buckets >= numBucketCounts - 2) {
         return;
     }
-    
-    printf("making table\n");
-    fflush(stdout);
 
     oNewSymTable = SymTable_ExpandNew((oSymTable->buckets) + 1);
     if(oNewSymTable == NULL) {
         return;
     }
 
-    printf("made table\n");
-    fflush(stdout);
 
     while(bucket < auBucketCounts[oSymTable->buckets]) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
@@ -170,13 +165,15 @@ static void SymTable_expand(SymTable_T oSymTable) {
         }
         bucket++;
     }
-    printf("filled table\n");
-    fflush(stdout);
     psOldHashTable = oSymTable->psHashTable;
     oSymTable->psHashTable = oNewSymTable->psHashTable;
     (oSymTable->buckets)++;
 
+    (oNewSymTable->buckets)--;
+    oNewSymTable->psHashTable = psOldHashTable;
+    free(oNewSymTable);
 
+    return;
 }
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
@@ -193,8 +190,6 @@ const void *pvValue) {
     }
 
     if(oSymTable->bindings == auBucketCounts[oSymTable->buckets]) {
-        printf("expansion triggered\n");
-        fflush(stdout);
         SymTable_expand(oSymTable);
     }
 
