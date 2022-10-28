@@ -165,10 +165,12 @@ static void SymTable_expand(SymTable_T oSymTable) {
                 free(oNewSymTable);
                 return; 
             } */
+
+            psCurrentBinding = psCurrentBinding->psNextBinding;
         }
         bucket++;
-            printf("finished test\n");
-                fflush(stdout);
+        printf("finished test\n");
+        fflush(stdout);
     }
     printf("filled table\n");
     fflush(stdout);
