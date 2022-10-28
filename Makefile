@@ -1,5 +1,5 @@
 # Dependency rules for non-file targets
-all: testsymtablelist testsymtablehash
+all: testsymtablehash testsymtablelist 
 clobber: clean
 	rm -f *~ \#*\#
 clean:
