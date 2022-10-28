@@ -188,7 +188,7 @@ const void *pvValue) {
         return 0;
     }
 
-    if(oSymTable->bindings >= auBucketCounts[oSymTable->buckets]) {
+    if(oSymTable->bindings == auBucketCounts[oSymTable->buckets]) {
         printf("expansion triggered\n");
         fflush(stdout);
         oSymTable = SymTable_expand(oSymTable);
