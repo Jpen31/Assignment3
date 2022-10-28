@@ -118,7 +118,7 @@ const void *pvValue) {
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
             pvTempValue = psChecker->pvValue;
-            psChecker->pvValue = (char *) pvValue;
+            psChecker->pvValue = (void *) pvValue;
             return pvTempValue;
         }
         psChecker = psChecker->psNextBinding;
@@ -228,8 +228,8 @@ const void *pvExtra) {
     /* applies pfApply to every binding in oSymTable */
     psCurrentBinding = oSymTable->psFirstBinding;
     while(psCurrentBinding != NULL) {
-        pfApply(psCurrentBinding->pcKey, psCurrentBinding->pvValue, 
-        (char*) pvExtra);
+        (*pfApply)(psCurrentBinding->pcKey, psCurrentBinding->pvValue, 
+        (void*) pvExtra);
         psCurrentBinding = psCurrentBinding->psNextBinding;
     }
 
