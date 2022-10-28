@@ -107,8 +107,8 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
     return oSymTable->bindings;
 }
 
-/* Creates a new SymTable_T object with an expanded hash table, based
-on the size of the incrementer buckets. Returns the symbol table if
+/* Creates a new SymTable_T object with an expanded hash table, based on 
+the size of the incrementer buckets. Returns the symbol table if
 succesfful and NULL if not. */
 static SymTable_T SymTable_ExpandNew(size_t buckets) {
     SymTable_T oSymTable;
