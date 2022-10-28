@@ -161,16 +161,14 @@ static void SymTable_expand(SymTable_T oSymTable) {
             success = SymTable_put(oNewSymTable, 
             psCurrentBinding->pcKey, psCurrentBinding->pvValue);
             
-            /* if(success == 0) {
+            if(success == 0) {
                 free(oNewSymTable);
                 return; 
-            } */
+            }
 
             psCurrentBinding = psCurrentBinding->psNextBinding;
         }
         bucket++;
-        printf("finished test\n");
-        fflush(stdout);
     }
     printf("filled table\n");
     fflush(stdout);
