@@ -199,9 +199,9 @@ const void *pvValue) {
         return 0;
     }
 
-    if(oSymTable->bindings == auBucketCounts[oSymTable->buckets]) {
+    /* if(oSymTable->bindings == auBucketCounts[oSymTable->buckets]) {
         SymTable_expand(oSymTable);
-    }
+    } */
 
     /* allocates memory for new binding and copy of pcKey */    
     psNewBinding = (struct Binding*)malloc(sizeof(struct Binding));
@@ -359,8 +359,8 @@ const void *pvExtra) {
     while(bucket < auBucketCounts[oSymTable->buckets]) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
         while(psCurrentBinding != NULL) {
-            (*pfApply)(psCurrentBinding->pcKey, psCurrentBinding->pvValue, 
-            (char*) pvExtra);
+            (*pfApply)(psCurrentBinding->pcKey, 
+            psCurrentBinding->pvValue, (void*) pvExtra);
             psCurrentBinding = psCurrentBinding->psNextBinding;
         }
         bucket++;
