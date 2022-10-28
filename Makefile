@@ -1,10 +1,9 @@
 # Dependency rules for non-file targets
 all: testsymtablelist testsymtablehash
 clobber: clean
-rm -f *~ \#*\#
+	rm -f *~ \#*\#
 clean:
-rm -f testsymtablelist *.o
-rm -f testsymtablehash *.o
+	rm -f testsymtablelist *.o testsymtablehash *.o 
 
 # Dependency rules for file targets
 testsymtablelist: testsymtable.o symtablelist.o
