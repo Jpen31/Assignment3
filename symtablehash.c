@@ -167,6 +167,8 @@ static void SymTable_expand(SymTable_T oSymTable) {
             } */
         }
         bucket++;
+            printf("finished test\n");
+                fflush(stdout);
     }
     printf("filled table\n");
     fflush(stdout);
