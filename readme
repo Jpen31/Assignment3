@@ -12,7 +12,20 @@ in the "Policies" web page (also available on armlab in the file
 ~cos217/AuthorizedSourcesList ) to this section of the readme file,
 and edit it as appropriate.
 
+The course's lectures.
 
+The course's precepts.
+
+The course's website.
+
+Documents that are referenced directly by the course's website. 
+Such documents include the course's lecture slides and precept handouts.
+
+The course's current staff members outside of class time through Ed.
+
+The course's current staff members outside of class time through e-mail.
+
+Current Intro Lab TAs through visits to the Intro COS Lab.
 
 ------------------------------------------------------------------------
 What unauthorized sources of information did you use to complete the
@@ -31,7 +44,7 @@ None
 ------------------------------------------------------------------------
 What is your assessment of the assignment? Was it helpful? Was it fun?
 
-
+It helped me understand dynamic memory
 
 ------------------------------------------------------------------------
 (optional) What information can you provide about your submission that
@@ -46,8 +59,7 @@ disagreements with them? Copy the splint warnings here, and express your
 disagreement after each warning. If there are no warnings, then write
 "None."
 
-symtablelist.c: (in function SymTable_map)
-symtablelist.c:231:9: Statement has no effect: pfApply(psCurren...
+None
     
 ------------------------------------------------------------------------
 What warnings does critTer generate on symtablelist.c, and what are your
@@ -64,7 +76,10 @@ Do you want to validate 'pvValue' through an assert?
 symtablelist.c: line 222: medium priority:
 Do you want to validate 'pvExtra' through an assert?
 
-I disagree with all three of these war
+I disagree with all three of these statements because there is no need
+to assert these values are not NULL. In fact, because these values can
+point to NULL, such an assert would crash the program for a legal
+function call.
 
 ------------------------------------------------------------------------
 What warnings does splint generate on symtablehash.c, and what are your
@@ -72,8 +87,7 @@ disagreements with them? Copy the splint warnings here, and express your
 disagreement after each warning. If there are no warnings, then write
 "None."
 
-symtablehash.c: (in function SymTable_map)
-symtablehash.c:257:13: Statement has no effect: pfApply(psCurren...
+None
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on symtablehash.c, and what are your
@@ -81,14 +95,19 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
-symtablehash.c: line 110: medium priority:
+symtablehash.c: line 190: medium priority:
 Do you want to validate 'pvValue' through an assert?
 
-symtablehash.c: line 149: medium priority:
+symtablehash.c: line 233: medium priority:
 Do you want to validate 'pvValue' through an assert?
 
-symtablehash.c: line 267: medium priority:
+symtablehash.c: line 351: medium priority:
 Do you want to validate 'pvExtra' through an assert?
+
+I disagree with all three of these statements because there is no need
+to assert these values are not NULL. In fact, because these values can
+point to NULL, such an assert would crash the program for a legal
+function call.
 
 ------------------------------------------------------------------------
 What are the CPU times reported by testsymtable.c with binding counts
@@ -97,22 +116,22 @@ implementation, (2) your non-expanding hash table implementation, and
 (3) your expanding hash table implementation? Fill in the blanks.
 
 The linked list implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed 0.000000 seconds.
+-- 500 bindings consumed 0.007874 seconds.
+-- 5000 bindings consumed 1.026479 seconds.
+-- 50000 bindings consumed 101.700861 seconds.
+-- 500000 bindings consumed More than five minutes.
 
 The non-expanding hash table implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed 0.000000 seconds.
+-- 500 bindings consumed 0.000000 seconds.
+-- 5000 bindings consumed 0.008900 seconds.
+-- 50000 bindings consumed 0.363500 seconds.
+-- 500000 bindings consumed 90.308476 seconds
 
 The expanding hash table implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed 0.000000  seconds.
+-- 500 bindings consumed 0.000000  seconds.
+-- 5000 bindings consumed 0.009073  seconds.
+-- 50000 bindings consumed 0.146441 seconds.
+-- 500000 bindings consumed 1.845491 seconds.
