@@ -120,7 +120,7 @@ static SymTable_T SymTable_ExpandNew(size_t buckets) {
         return NULL;
     }
     oSymTable->psHashTable = (struct Binding**)
-    calloc(sizeof(struct Binding*), auBucketCounts[buckets]);
+    calloc(sizeof(struct Binding*), 65521);
     if(oSymTable->psHashTable == NULL) {
         free(oSymTable);
         return NULL;
@@ -128,7 +128,7 @@ static SymTable_T SymTable_ExpandNew(size_t buckets) {
 
     /* initializes parameters of oSymTable */
     oSymTable->bindings = 0;
-    oSymTable->buckets = buckets;
+    oSymTable->buckets = 7;
     
     return oSymTable;
 }
