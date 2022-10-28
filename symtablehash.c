@@ -359,7 +359,7 @@ const void *pvExtra) {
     while(bucket < auBucketCounts[oSymTable->buckets]) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
         while(psCurrentBinding != NULL) {
-            pfApply(psCurrentBinding->pcKey, psCurrentBinding->pvValue, 
+            (*pfApply)(psCurrentBinding->pcKey, psCurrentBinding->pvValue, 
             (char*) pvExtra);
             psCurrentBinding = psCurrentBinding->psNextBinding;
         }
