@@ -87,7 +87,8 @@ const void *pvValue) {
     if (psNewBinding == NULL) {
         return 0;
     }
-    psNewBinding->pcKey = (char*)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
+    psNewBinding->pcKey = 
+    (char *)calloc(strlen(pcKey) + 1, sizeof(*pcKey));
     if(psNewBinding->pcKey == NULL) {
         free(psNewBinding);  
         return 0;
@@ -229,7 +230,7 @@ const void *pvExtra) {
     psCurrentBinding = oSymTable->psFirstBinding;
     while(psCurrentBinding != NULL) {
         (*pfApply)(psCurrentBinding->pcKey, psCurrentBinding->pvValue, 
-        (void*) pvExtra);
+        (void *) pvExtra);
         psCurrentBinding = psCurrentBinding->psNextBinding;
     }
 

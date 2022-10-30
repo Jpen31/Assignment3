@@ -208,8 +208,7 @@ const void *pvValue) {
     if (psNewBinding == NULL) {
         return 0;
     }
-    psNewBinding->pcKey = 
-    (char*)malloc((strlen(pcKey) + 1));
+    psNewBinding->pcKey = (char *)malloc((strlen(pcKey) + 1));
     if(psNewBinding->pcKey == NULL) {
         free(psNewBinding);  
         return 0;
@@ -246,7 +245,7 @@ const void *pvValue) {
     while(psChecker != NULL) {
         if(!strcmp(psChecker->pcKey, pcKey)) {
             pvTempValue = psChecker->pvValue;
-            psChecker->pvValue = (char *) pvValue;
+            psChecker->pvValue = (void *) pvValue;
             return pvTempValue;
         }
         psChecker = psChecker->psNextBinding;
@@ -360,7 +359,7 @@ const void *pvExtra) {
         psCurrentBinding = oSymTable->psHashTable[bucket];
         while(psCurrentBinding != NULL) {
             (*pfApply)(psCurrentBinding->pcKey, 
-            psCurrentBinding->pvValue, (void*) pvExtra);
+            psCurrentBinding->pvValue, (void *) pvExtra);
             psCurrentBinding = psCurrentBinding->psNextBinding;
         }
         bucket++;
