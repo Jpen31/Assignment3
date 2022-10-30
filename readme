@@ -77,9 +77,9 @@ symtablelist.c: line 222: medium priority:
 Do you want to validate 'pvExtra' through an assert?
 
 I disagree with all three of these statements because there is no need
-to assert these values are not NULL. In fact, because these values can
-point to NULL, such an assert would crash the program for a legal
-function call.
+to assert these values are not NULL. In fact, because these values are
+allowed to point to NULL, such an assert would abort the program even
+if the function call is legal.
 
 ------------------------------------------------------------------------
 What warnings does splint generate on symtablehash.c, and what are your
@@ -105,9 +105,9 @@ symtablehash.c: line 351: medium priority:
 Do you want to validate 'pvExtra' through an assert?
 
 I disagree with all three of these statements because there is no need
-to assert these values are not NULL. In fact, because these values can
-point to NULL, such an assert would crash the program for a legal
-function call.
+to assert these values are not NULL. In fact, because these values are
+allowed to point to NULL, such an assert would abort the program even
+if the function call is legal.
 
 ------------------------------------------------------------------------
 What are the CPU times reported by testsymtable.c with binding counts
@@ -120,7 +120,7 @@ The linked list implementation with:
 -- 500 bindings consumed 0.007874 seconds.
 -- 5000 bindings consumed 1.026479 seconds.
 -- 50000 bindings consumed 101.700861 seconds.
--- 500000 bindings consumed More than five minutes.
+-- 500000 bindings consumed more than five minutes.
 
 The non-expanding hash table implementation with:
 -- 50 bindings consumed 0.000000 seconds.
