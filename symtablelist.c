@@ -3,13 +3,12 @@
 /* Author: Jacob Penstein                                             */
 /*--------------------------------------------------------------------*/
 
-
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include "symtable.h"
 
-/* Each key/value pair is stored in a Binding. Bindings are linked to
+/* Each key/value pair is stored in a Binding. Bindings are linked to 
 form a linked list symbol table. */
 struct Binding
 {

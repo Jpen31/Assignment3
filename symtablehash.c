@@ -7,14 +7,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "symtable.h"
-#include <stdio.h>
 
 /* array of bucket count sizes for hash expansion */
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
 16381, 32749, 65521};
 
 /* Each key/value pair is stored in a Binding. Bindings are each found
-in a linked list beginning at a bucket in the hush table. */
+in a linked list beginning at a bucket in the hash table. */
 struct Binding
 {
     /* key */
@@ -62,22 +61,6 @@ SymTable_T SymTable_new(void) {
     return oSymTable;
 }
 
-/* Return a hash code for pcKey that is between 0 and uBucketCount-1,
-inclusive. */
-static size_t SymTable_hash(const char *pcKey, size_t uBucketCount) {
-    const size_t HASH_MULTIPLIER = 65599;
-    size_t u;
-    size_t uHash = 0;
-
-    assert(pcKey != NULL);
-
-    for (u = 0; pcKey[u] != '\0'; u++) {
-        uHash = uHash * HASH_MULTIPLIER + (size_t)pcKey[u];
-    }
-
-    return uHash % uBucketCount;
-}
-
 void SymTable_free(SymTable_T oSymTable) {
     struct Binding *psCurrentBinding;
     struct Binding *psNextBinding;
@@ -105,6 +88,22 @@ void SymTable_free(SymTable_T oSymTable) {
 size_t SymTable_getLength(SymTable_T oSymTable) {
     assert(oSymTable != NULL);
     return oSymTable->bindings;
+}
+
+/* Return a hash code for pcKey that is between 0 and uBucketCount-1,
+inclusive. */
+static size_t SymTable_hash(const char *pcKey, size_t uBucketCount) {
+    const size_t HASH_MULTIPLIER = 65599;
+    size_t u;
+    size_t uHash = 0;
+
+    assert(pcKey != NULL);
+
+    for (u = 0; pcKey[u] != '\0'; u++) {
+        uHash = uHash * HASH_MULTIPLIER + (size_t)pcKey[u];
+    }
+
+    return uHash % uBucketCount;
 }
 
 /* Creates a new SymTable_T object with an expanded hash table, based on 
@@ -199,6 +198,7 @@ const void *pvValue) {
         return 0;
     }
 
+    /* checks if the symbol table should be expanded. */
     if(oSymTable->bindings == auBucketCounts[oSymTable->buckets]) {
         SymTable_expand(oSymTable);
     }

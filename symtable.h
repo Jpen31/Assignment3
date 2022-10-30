@@ -8,7 +8,7 @@
 
 #include <stddef.h>
 
-/* A SymTable_T object stores a collection key/value pairs. */
+/* A SymTable_T object stores a collection of key/value pairs. */
 typedef struct SymTable *SymTable_T;
 
 /* Returns a new SymTable_T object, or NULL if insufficeint memory is 
@@ -31,12 +31,12 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
 const void *pvValue);
 
 /* If oSymTable contains a pair with pcKey, replaces its value with
-pvValue and returns the old value. If oStymTable does not contain
+pvValue and returns the old value. If oSymTable does not contain
 pcKey, returns NULL. oSymTable and pcKey cannot be NULL. */
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
 const void *pvValue);
 
-/* Returns 1 (TURE) if o SymTable contains pcKey and 0 (FALSE) if it
+/* Returns 1 (TrUE) if oSymTable contains pcKey and 0 (FALSE) if it
 does not. oSymTable and pcKey cannot be NULL. */
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey);
 
